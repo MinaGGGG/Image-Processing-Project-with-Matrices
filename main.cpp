@@ -156,6 +156,7 @@ Image convertToGrayscale(const Image& input) {      // Mina
         int G = input(y, x, 1);
         int B = input(y, x, 2);
         int gray = static_cast<int>(0.299 * R + 0.587 * G + 0.114 * B);
+        output(y,x,0) = gray;    
         }
     }
     return output;
