@@ -156,7 +156,7 @@ Image convertToGrayscale(const Image& input) {      // Mina
         int G = input(y, x, 1);
         int B = input(y, x, 2);
         int gray = static_cast<int>(0.299 * R + 0.587 * G + 0.114 * B);
-        output(y,x,0) = gray;    
+        output(y,x,0) = gray;
         }
     }
     return output;
@@ -275,12 +275,33 @@ Image applyBlur(const Image& input) {   //George  // Mina
     int channels = input.getChannels();
     Image output(width, height, channels);
 
-    // TODO: Implement this function
-    // For each pixel (from y=1 to height-2, x=1 to width-2) and each channel:
-    //   sum = 0
-    //   For each neighbor (ky from -1 to 1, kx from -1 to 1):
-    //     sum += input(y+ky, x+kx, c)
-    //   output(y, x, c) = sum / 9
+    for (int y = 1; y < height - 1; y++) {
+        for (int x = 1; x < width - 1; x++) {
+            for (int c = 0; c < channels; c++) {
+                int sum = 0;
+                for (int ky = -1; ky <= 1; ky++) {
+                    for (int kx = -1; kx <= 1; kx++) {
+                        sum += input(y + ky, x + kx, c);
+                    }
+                }
+                output(y, x, c) = sum / 9;
+            }
+        }
+    }
+
+    for (int x = 0; x < width; x++) {
+        for (int c = 0; c < channels; c++) {
+            output(0, x, c) = input(0, x, c); // Top row
+            output(height - 1, x, c) = input(height - 1, x, c); // Bottom row
+        }
+    }
+
+    for (int y = 1; y < height - 1; y++) {
+        for (int c = 0; c < channels; c++) {
+            output(y, 0, c) = input(y, 0, c); // Left column
+            output(y, width - 1, c) = input(y, width - 1, c); // Right column
+        }
+    }
 
     return output;
 }
