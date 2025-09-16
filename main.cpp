@@ -242,6 +242,15 @@ Image adjustBrightness(const Image& input, int value) {   //Ahmed
     // For each pixel and each channel:
     //   new_value = input(y, x, c) + value
     //   output(y, x, c) = max(0, min(255, new_value))
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            for (int c = 0; c < channels; c++) {
+                int new_value = input(y, x, c) + value;
+                new_value = max(0, min(255, new_value));
+                output(y, x, c) = new_value;
+            }
+        }
+    }
 
     return output;
 }
@@ -268,6 +277,16 @@ Image adjustContrast(const Image& input, float factor) {  //Ahmed
     // For each pixel and each channel:
     //   new_value = factor * (input(y, x, c) - 128) + 128
     //   output(y, x, c) = max(0, min(255, new_value))
+
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            for (int c = 0; c < channels; c++) {
+                int new_value = static_cast<int>(factor * (input(y, x, c) - 128) + 128);
+                new_value = max(0, min(255, new_value));
+                output(y, x, c) = new_value;
+            }
+        }
+    }
 
     return output;
 }
@@ -318,6 +337,14 @@ Image rotate90(const Image& input) {   //Abdo  // Ahmed
     // TODO: Implement this function
     // For each pixel and each channel:
     //   output(x, height-1-y, c) = input(y, x, c)
+
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            for (int c = 0; c < channels; c++) {
+                output(x, height - 1 - y, c) = input(y, x, c);
+            }
+        }
+    }
 
     return output;
 }
